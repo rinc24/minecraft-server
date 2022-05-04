@@ -1,10 +1,5 @@
 version: "3"
 
-networks:
-  default:
-    external:
-      name: nginx-proxy
-
 services:
   minecraft:
     image: itzg/minecraft-server
@@ -18,5 +13,3 @@ services:
       - ./minecraft-data:/data
     environment:
       - EULA=TRUE
-      - VIRTUAL_HOST=mycraf.tk
-      - VIRTUAL_PORT=25565
