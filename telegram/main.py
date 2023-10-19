@@ -18,8 +18,6 @@ def get_config():
 
         config = dict(**DEFAULT_CONFIG)
 
-        print(config_file_content)
-
         if not config_file_content:
             config_file.write(json.dumps(config, ensure_ascii=False, indent=2))
         else:
