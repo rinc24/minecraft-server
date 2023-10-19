@@ -9,7 +9,7 @@ BOT_TOKEN = os.getenv("BOT_TOKEN", "6503031622:AAGK5icKtOWCw1rtEnU5zdxAdfcVkNXw4
 LATEST_LOG_PATH = os.getenv("LATEST_LOG_PATH", "/opt/minecraft-server/minecraft-data/logs/latest.log")
 PROCESSED_LOG_PATH = os.getenv("PROCESSED_LOG_PATH", "./processed.log")
 PATTERN = r"^\[(\d{2}:\d{2}:\d{2})\] \[Server thread\/(\w{4})\]: (\[Not Secure\] )?(.*)$"
-DEFAULT_CONFIG = {"ADMIN_CHAT_ID": None, "CHAT_ID": None}
+DEFAULT_CONFIG = {"ADMIN_USER_ID": None, "CHAT_ID": None, "SYNC_CHAT": True}
 
 
 def get_config():
