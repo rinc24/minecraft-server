@@ -48,21 +48,22 @@ while __name__ == "__main__":
             last_log_size = actual_log_size
 
         with open(LATEST_LOG_PATH, "r") as latest_log:
-            latest_log_lines = latest_log.readlines()
+            latest_log_lines = [line.strip() for line in latest_log.read().split("\n") if line.strip()]
 
-        with open(PROCESSED_LOG_PATH, "r+") as processed_log:
-            processed_log_lines = processed_log.readlines()
+        with open(PROCESSED_LOG_PATH, "r") as processed_log:
+            processed_log_lines = [line.strip() for line in processed_log.read().split("\n") if line.strip()]
             last_processed_log_line = processed_log_lines[-1] if processed_log_lines else None
 
+        with open(PROCESSED_LOG_PATH, "w") as processed_log:
             start_index = 0
             if last_processed_log_line and last_processed_log_line in latest_log_lines:
-                start_index = latest_log_lines.index(last_processed_log_line) + 1
+                start_index = len(latest_log_lines) - (latest_log_lines[::-1].index(last_processed_log_line))
 
             messages = []
-            for latest_log_line in latest_log_lines[start_index:]:
-                processed_log_lines.append(latest_log_line)
-                processed_log.writelines(processed_log_lines)
+            new_latest_log_lines = latest_log_lines[start_index:]
+            processed_log.write("\n".join(processed_log_lines + new_latest_log_lines))
 
+            for latest_log_line in new_latest_log_lines:
                 match = re.match(PATTERN, latest_log_line)
 
                 if not match:
