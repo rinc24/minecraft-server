@@ -50,14 +50,18 @@ while __name__ == "__main__":
         with open(LATEST_LOG_PATH, "r") as latest_log:
             latest_log_lines = latest_log.readlines()
 
-        with open(PROCESSED_LOG_PATH, "a+") as processed_log:
+        with open(PROCESSED_LOG_PATH, "r+") as processed_log:
             processed_log_lines = processed_log.readlines()
             last_processed_log_line = processed_log_lines[-1] if processed_log_lines else None
-            start_index = latest_log_lines.index(last_processed_log_line) + 1 if last_processed_log_line else 0
+
+            start_index = 0
+            if last_processed_log_line and last_processed_log_line in latest_log_lines:
+                start_index = latest_log_lines.index(last_processed_log_line) + 1
 
             messages = []
             for latest_log_line in latest_log_lines[start_index:]:
-                processed_log.write(latest_log_line)
+                processed_log_lines.append(latest_log_line)
+                processed_log.writelines(processed_log_lines)
 
                 match = re.match(PATTERN, latest_log_line)
 
