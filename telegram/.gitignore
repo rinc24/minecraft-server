@@ -1,0 +1,4 @@
+venv
+config.json
+processed.log
+__pycache__
