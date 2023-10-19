@@ -16,7 +16,6 @@ def check_admin(message):
 
 
 def check_chat(message):
-    print("CHECCHAT")
     return get_config()["CHAT_ID"] == message.chat.id
 
 

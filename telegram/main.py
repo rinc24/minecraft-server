@@ -75,7 +75,7 @@ while __name__ == "__main__":
                 log_level = groups[1]
                 message = groups[3]
 
-                if log_level == "INFO":
+                if log_level == "INFO" and "[Rcon]" not in message:
                     messages.append(f"`{time}`\t{message}")
 
             if messages:
