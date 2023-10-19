@@ -39,7 +39,7 @@ def say(message):
     if get_config()["CHAT_ID"] != message.chat.id:
         return
 
-    message = message.text.lstrip("/say ")
+    message = message.text.replace("/say ", "")
 
     if not message:
         return
