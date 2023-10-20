@@ -88,8 +88,5 @@ bot.set_my_commands(
     ]
 )
 
-while __name__ == "__main__":
-    try:
-        bot.infinity_polling()
-    except Exception as e:
-        print(e)
+if __name__ == "__main__":
+    bot.infinity_polling()

@@ -50,52 +50,48 @@ bot = telebot.TeleBot(BOT_TOKEN, parse_mode="MARKDOWN")
 last_log_size = 0
 
 while __name__ == "__main__":
-    try:
-        chat_id = get_data()["CHAT_ID"]
-        actual_log_size = os.path.getsize(LATEST_LOG_PATH)
+    chat_id = get_data()["CHAT_ID"]
+    actual_log_size = os.path.getsize(LATEST_LOG_PATH)
 
-        if not chat_id or last_log_size == actual_log_size:
-            sleep(1)
-            continue
-        else:
-            last_log_size = actual_log_size
+    if not chat_id or last_log_size == actual_log_size:
+        sleep(1)
+        continue
+    else:
+        last_log_size = actual_log_size
 
-        LATEST_LOG_PATH.touch()
-        PROCESSED_LOG_PATH.touch()
+    LATEST_LOG_PATH.touch()
+    PROCESSED_LOG_PATH.touch()
 
-        with open(LATEST_LOG_PATH, "r") as latest_log:
-            latest_log_lines = [line.strip() for line in latest_log.read().split("\n") if line.strip()]
+    with open(LATEST_LOG_PATH, "r") as latest_log:
+        latest_log_lines = [line.strip() for line in latest_log.read().split("\n") if line.strip()]
 
-        with open(PROCESSED_LOG_PATH, "r") as processed_log:
-            processed_log_lines = [line.strip() for line in processed_log.read().split("\n") if line.strip()]
-            last_processed_log_line = processed_log_lines[-1] if processed_log_lines else None
+    with open(PROCESSED_LOG_PATH, "r") as processed_log:
+        processed_log_lines = [line.strip() for line in processed_log.read().split("\n") if line.strip()]
+        last_processed_log_line = processed_log_lines[-1] if processed_log_lines else None
 
-        with open(PROCESSED_LOG_PATH, "w") as processed_log:
-            start_index = -20
-            if last_processed_log_line and last_processed_log_line in latest_log_lines:
-                start_index = len(latest_log_lines) - (latest_log_lines[::-1].index(last_processed_log_line))
+    with open(PROCESSED_LOG_PATH, "w") as processed_log:
+        start_index = -20
+        if last_processed_log_line and last_processed_log_line in latest_log_lines:
+            start_index = len(latest_log_lines) - (latest_log_lines[::-1].index(last_processed_log_line))
 
-            messages = []
-            new_latest_log_lines = latest_log_lines[start_index:]
-            processed_log.write("\n".join(processed_log_lines + new_latest_log_lines))
+        messages = []
+        new_latest_log_lines = latest_log_lines[start_index:]
+        processed_log.write("\n".join(processed_log_lines + new_latest_log_lines))
 
-            for latest_log_line in new_latest_log_lines:
-                match = re.match(PATTERN, latest_log_line)
+        for latest_log_line in new_latest_log_lines:
+            match = re.match(PATTERN, latest_log_line)
 
-                if not match:
-                    continue
+            if not match:
+                continue
 
-                groups = match.groups()
+            groups = match.groups()
 
-                time = groups[0]
-                log_level = groups[1]
-                message = groups[3]
+            time = groups[0]
+            log_level = groups[1]
+            message = groups[3]
 
-                if log_level == "INFO" and "[Rcon]" not in message:
-                    messages.append(f"`{time}`\t{message}")
+            if log_level == "INFO" and "[Rcon]" not in message:
+                messages.append(f"`{time}`\t{message}")
 
-            if messages:
-                bot.send_message(chat_id, "\n".join(messages), disable_notification=True)
-
-    except Exception as e:
-        print(e)
+        if messages:
+            bot.send_message(chat_id, "\n".join(messages), disable_notification=True)
