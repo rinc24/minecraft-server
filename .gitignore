@@ -1,7 +1,5 @@
 minecraft-data
+telegram-data
 venv
 .env
-data.json
-latest.log
-processed.log
 __pycache__

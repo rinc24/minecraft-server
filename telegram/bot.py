@@ -1,49 +1,68 @@
 #!/usr/bin/env python
-from main import telebot, bot, write_data, get_data
-import subprocess
+from main import telebot, bot, update_data, get_data, os, re
+from mctools import RCONClient
+
+rcon = RCONClient("minecraft.server")
+assert rcon.login(os.getenv("RCON_PASSWORD")), "Нет связи с RCON"
 
 
-def run_command(cmd: str, long_arg: str = None) -> str:
-    command = "docker exec -i minecraft rcon-cli".split()
-    command.append(cmd)
-    if long_arg:
-        command.append(long_arg)
-    return subprocess.run(command, stdout=subprocess.PIPE, universal_newlines=True).stdout
+def run_command(cmd: str):
+    response = rcon.command(cmd)
+    ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
+    return ansi_escape.sub("", response)
 
 
-def check_admin(message):
-    return get_data()["ADMIN_USER_ID"] == message.from_user.id
+def check_admin(handler):
+    def wrapper(message):
+        admin_user_id = get_data()["ADMIN_USER_ID"]
+
+        # print(f"check_admin | {handler.__name__} | ADMIN_USER_ID: {admin_user_id} | user.id: {message.from_user.id}")
+        if admin_user_id == message.from_user.id:
+            return handler(message)
+
+    return wrapper
 
 
-def check_chat(message):
-    return get_data()["CHAT_ID"] == message.chat.id
+def check_chat(handler):
+    def wrapper(message):
+        chat_id = get_data()["CHAT_ID"]
+
+        # print(f"check_chat | {handler.__name__} | CHAT_ID: {chat_id} | chat.id: {message.chat.id}")
+        if chat_id == message.chat.id:
+            return handler(message)
+
+    return wrapper
 
 
 @bot.message_handler(commands=["itsmebro"])
 def itsmebro(message):
-    write_data({"ADMIN_USER_ID": message.from_user.id})
+    update_data(ADMIN_USER_ID=message.from_user.id)
     bot.reply_to(message, f"`ADMIN_USER_ID:` {message.from_user.id}")
 
 
-@bot.message_handler(commands=["here"], func=check_admin)
+@bot.message_handler(commands=["here"])
+@check_admin
 def here(message):
-    write_data({"CHAT_ID": message.chat.id})
+    update_data(CHAT_ID=message.chat.id)
     bot.reply_to(message, f"`CHAT_ID:` {message.chat.id}\nУведомления будут приходить в этот чат.")
 
 
-@bot.message_handler(commands=["sync"], func=check_chat)
+@bot.message_handler(commands=["sync"])
+@check_chat
 def sync(message):
     new_value = not get_data()["SYNC_CHAT"]
-    write_data({"SYNC_CHAT": new_value})
+    update_data(SYNC_CHAT=new_value)
     bot.reply_to(message, "Все сообщения в чате " + ("" if new_value else "НЕ ") + "синхронизируются с сервером.")
 
 
-@bot.message_handler(commands=["players"], func=check_chat)
+@bot.message_handler(commands=["players"])
+@check_chat
 def players(message):
     bot.reply_to(message, run_command("list"))
 
 
-@bot.message_handler(func=check_chat)
+@bot.message_handler(func=lambda m: True)
+@check_chat
 def all_mesages(message):
     message_text = message.text.strip()
 
@@ -59,7 +78,7 @@ def all_mesages(message):
             [name for name in (message.from_user.first_name, message.from_user.last_name) if name]
         )
 
-    run_command("say", f"<{author}>: {message_text}")
+    run_command(f"say <{author}>: {message_text}")
 
 
 bot.set_my_commands(
