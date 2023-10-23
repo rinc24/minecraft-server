@@ -91,7 +91,10 @@ while __name__ == "__main__":
             message = groups[3]
 
             if log_level == "INFO" and "[Rcon]" not in message:
-                messages.append(f"`{time}`\t{message}")
+                if start_index == -20:
+                    messages.append(f"`{time}`\t{message}")
+                else:
+                    messages.append(message)
 
         if messages:
             bot.send_message(chat_id, "\n".join(messages), disable_notification=True)
