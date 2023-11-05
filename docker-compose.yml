@@ -1,41 +1,39 @@
 version: "3"
 
 services:
-  minecraft.server:
-    image: itzg/minecraft-server
-    container_name: minecraft.server
-    tty: true
-    stdin_open: true
-    restart: unless-stopped
-    ports:
-      - 25565:25565
-    volumes:
-      - ./minecraft-data:/data
-    environment:
-      - EULA=TRUE
-      - VERSION=1.20.2
-      - MEMORY=3G
-      - RCON_PASSWORD
+  # minecraft.server:
+  #   container_name: minecraft.server
+  #   image: itzg/minecraft-server
+  #   restart: unless-stopped
+  #   tty: true
+  #   stdin_open: true
+  #   ports:
+  #     - 25565:25565
+  #   volumes:
+  #     - ./minecraft-data:/data
+  #   environment:
+  #     - EULA=TRUE
+  #     - VERSION=1.20.2
+  #     - MEMORY=3G
+  #     - RCON_PASSWORD
   minecraft.notifier:
-    build: ./telegram
     container_name: minecraft.notifier
+    build: ./telegram
     restart: unless-stopped
-    depends_on:
-      - minecraft.server
-    environment:
-      - BOT_TOKEN
     volumes:
       - ./telegram-data:/data
-      - ./minecraft-data/logs:/logs
+      - /home/minecraft/server/logs:/logs
+    environment:
+      - BOT_TOKEN
+
   minecraft.bot:
-    build: ./telegram
     container_name: minecraft.bot
+    build: ./telegram
     restart: unless-stopped
-    depends_on:
-      - minecraft.server
+    network_mode: "host"
+    volumes:
+      - ./telegram-data:/data
     environment:
       - BOT_TOKEN
       - RCON_PASSWORD
-    volumes:
-      - ./telegram-data:/data
     command: ["python", "-u", "/bot.py"]

@@ -15,7 +15,7 @@ DATA_PATH = Path(os.getenv("DATA_PATH", "data/data.json"))
 
 DEFAULT_DATA = {"ADMIN_USER_ID": None, "CHAT_ID": None, "SYNC_CHAT": True}
 
-PATTERN = r"^\[(\d{2}:\d{2}:\d{2})\] \[Server thread\/(\w{4})\]: (\[Not Secure\] )?(.*)$"
+PATTERN = r"^\[(\d{2}:\d{2}:\d{2})\] \[.*/(\w{4})\]: (\[Not Secure\] )?(.*)$"
 
 
 def get_data():

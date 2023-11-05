@@ -2,7 +2,7 @@
 from main import telebot, bot, update_data, get_data, os, re
 from mctools import RCONClient
 
-rcon = RCONClient("minecraft.server")
+rcon = RCONClient(os.getenv("RCON_HOST", "127.0.0.1"))
 assert rcon.login(os.getenv("RCON_PASSWORD")), "Нет связи с RCON"
 
 
