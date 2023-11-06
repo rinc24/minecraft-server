@@ -45,7 +45,7 @@ def update_data(**kwargs):
     write_data(data)
 
 
-bot = telebot.TeleBot(BOT_TOKEN, parse_mode="MARKDOWN")
+bot = telebot.TeleBot(BOT_TOKEN)
 
 last_log_size = 0
 
