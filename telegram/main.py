@@ -13,7 +13,7 @@ LATEST_LOG_PATH = Path(os.getenv("LATEST_LOG_PATH", "logs/latest.log"))
 PROCESSED_LOG_PATH = Path(os.getenv("PROCESSED_LOG_PATH", "logs/processed.log"))
 DATA_PATH = Path(os.getenv("DATA_PATH", "data/data.json"))
 
-DEFAULT_DATA = {"ADMIN_USER_ID": None, "CHAT_ID": None, "SYNC_CHAT": True}
+DEFAULT_DATA = {"ADMIN_USER_IDS": [], "CHAT_ID": None, "SYNC_CHAT": True}
 
 PATTERN = r"^\[(\d{2}:\d{2}:\d{2})\] \[.*/(\w{4})\]: (\[Not Secure\] )?(.*)$"
 
