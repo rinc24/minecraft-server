@@ -78,6 +78,11 @@ def rcon_handler(message):
 def players(message):
     bot.reply_to(message, run_command("list"))
 
+@bot.message_handler(commands=["test"])
+@check_chat
+def test(message):
+    bot.reply_to(message, 'privet')
+
 
 def get_list_admins(chat_id: int):
     return "\n".join(
