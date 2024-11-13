@@ -83,7 +83,7 @@ def players(message):
 @check_admin
 @check_chat
 def startday(message):
-    bot.reply_to(message, run_command("/rcon gamerule doDaylightCycle false"))
+    bot.reply_to(message, run_command("gamerule doDaylightCycle false"))
 
 
 def get_list_admins(chat_id: int):
