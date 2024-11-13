@@ -90,8 +90,7 @@ def day(message):
 @check_admin
 @check_chat
 def night(message):
-    command = '/rcon gamerule doDaylightCycle true'
-    bot.reply_to(message, run_command(command))
+    bot.reply_to(message, run_command(gamerule doDaylightCycle true))
 
 
 def get_list_admins(chat_id: int):
