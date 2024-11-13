@@ -101,6 +101,13 @@ def recipe(message):
     bot.reply_to(message, run_command("recipe give @a *"))
 
 
+@bot.message_handler(commands=["addplayers"])
+@check_chat
+def addplayers(message):
+    bot.send_message(message.from_user.id, 'Введите ник нового игрока на сервере:', reply_text=keyboard)
+    bot.reply_to(message, run_command("whitelist add" keyboard.text))
+
+
 def get_list_admins(chat_id: int):
     return "\n".join(
         [f"* {get_chat_member_name(chat_id, user_id=admin_id)}" for admin_id in get_data()["ADMIN_USER_IDS"]]
@@ -143,6 +150,7 @@ bot.set_my_commands(
         telebot.types.BotCommand("/night", "Включить течение времени"),
         # telebot.types.BotCommand("/sync", "Синхронизировать чат"),
         telebot.types.BotCommand("/recipe", "Дать все рецепты"),
+        telebot.types.BotCommand("/addplayers", "Добавить игрока на сервер"),
     ]
 )
 
