@@ -110,7 +110,7 @@ def addplayers(message):
 
 
 def saveusername(message):
-    bot.reply_to(message, run_command("whitelist add", message))
+    bot.reply_to(message, run_command("list"))
 
 
 def get_list_admins(chat_id: int):
