@@ -90,7 +90,7 @@ def day(message):
 @check_admin
 @check_chat
 def night(message):
-    command = /rcon gamerule doDaylightCycle true
+    command = '/rcon gamerule doDaylightCycle true'
     bot.reply_to(message, run_command(command))
 
 
