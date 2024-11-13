@@ -104,8 +104,7 @@ def recipe(message):
 @bot.message_handler(commands=["addplayers"])
 @check_chat
 def addplayers(message):
-    bot.send_message(message.from_user.id, 'Введите ник нового игрока на сервере:', reply_text=keyboard)
-    bot.reply_to(message, run_command("whitelist add" keyboard.text))
+    bot.send_message(message.from_user.id, 'Введите ник нового игрока на сервере:')
 
 
 def get_list_admins(chat_id: int):
