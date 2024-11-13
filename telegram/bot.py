@@ -78,11 +78,6 @@ def rcon_handler(message):
 def players(message):
     bot.reply_to(message, run_command("list"))
 
-@bot.message_handler(commands=["test"])
-@check_chat
-def test(message):
-    bot.reply_to(message, 'privet')
-
 
 def get_list_admins(chat_id: int):
     return "\n".join(
@@ -99,9 +94,9 @@ def admins(message):
 def get_chat_member_name(chat_id: int, user_id: int):
     chat_member = bot.get_chat_member(chat_id=chat_id, user_id=user_id)
     return (
-        chat_member.custom_title
-        or chat_member.user.username
-        or " ".join([name for name in (chat_member.user.first_name, chat_member.user.last_name) if name])
+            chat_member.custom_title
+            or chat_member.user.username
+            or " ".join([name for name in (chat_member.user.first_name, chat_member.user.last_name) if name])
     )
 
 

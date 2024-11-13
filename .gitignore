@@ -3,3 +3,4 @@ telegram-data
 venv
 .env
 __pycache__
+.idea/*
