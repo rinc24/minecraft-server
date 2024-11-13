@@ -79,6 +79,13 @@ def players(message):
     bot.reply_to(message, run_command("list"))
 
 
+@bot.message_handler(commands=["startday"])
+@check_admin
+@check_chat
+def startday(message):
+    bot.reply_to(message, run_command("/rcon gamerule doDaylightCycle false"))
+
+
 def get_list_admins(chat_id: int):
     return "\n".join(
         [f"* {get_chat_member_name(chat_id, user_id=admin_id)}" for admin_id in get_data()["ADMIN_USER_IDS"]]
@@ -117,6 +124,8 @@ bot.set_my_commands(
         telebot.types.BotCommand("/players", "Список игроков"),
         telebot.types.BotCommand("/admins", "Список админов"),
         telebot.types.BotCommand("/rcon", "Отправить rcon-команду"),
+        telebot.types.BotCommand("/day", "Остановить течение времени"),
+        telebot.types.BotCommand("/night", "Включить течение времени"),
         # telebot.types.BotCommand("/sync", "Синхронизировать чат"),
     ]
 )
