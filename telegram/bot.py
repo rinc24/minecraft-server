@@ -95,6 +95,12 @@ def night(message):
     bot.reply_to(message, run_command("time set 6000"))
 
 
+@bot.message_handler(commands=["recipe"])
+@check_chat
+def recipe(message):
+    bot.reply_to(message, run_command("recipe give @a *"))
+
+
 def get_list_admins(chat_id: int):
     return "\n".join(
         [f"* {get_chat_member_name(chat_id, user_id=admin_id)}" for admin_id in get_data()["ADMIN_USER_IDS"]]
@@ -136,6 +142,7 @@ bot.set_my_commands(
         telebot.types.BotCommand("/day", "Остановить течение времени"),
         telebot.types.BotCommand("/night", "Включить течение времени"),
         # telebot.types.BotCommand("/sync", "Синхронизировать чат"),
+        telebot.types.BotCommand("/recipe", "Дать все рецепты"),
     ]
 )
 
