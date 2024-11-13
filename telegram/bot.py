@@ -103,12 +103,12 @@ def recipe(message):
 
 @bot.message_handler(commands=["addplayers"])
 @check_chat
-def addplayers(message):
-    message = bot.send_message(message, 'Введите ник нового игрока на сервере:')
-    bot.register_next_step_handler(message, add)
+def addplayers(message1):
+    message1 = bot.send_message(message1, 'Введите ник нового игрока на сервере:')
+    bot.register_next_step_handler(message2, add)
 
-def add(message):
-    bot.send_message("whitelist add", message)
+def add(message2):
+    bot.send_message("whitelist add", message2)
 
 
 def get_list_admins(chat_id: int):
