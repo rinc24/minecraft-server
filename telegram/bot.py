@@ -91,7 +91,7 @@ def day(message):
 @check_chat
 def night(message):
     bot.reply_to(message, run_command("gamerule doDaylightCycle true"))
-    bot.reply_to(message, run_command("time 6000"))
+    bot.reply_to(message, run_command("list"))
 
 def get_list_admins(chat_id: int):
     return "\n".join(
