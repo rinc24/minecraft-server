@@ -90,7 +90,7 @@ def day(message):
 @check_admin
 @check_chat
 def night(message):
-    bot.reply_to(message, run_command("gamerule doDaylightCycle true"))
+    bot.reply_to(message, run_command("gamerule doDaylightCycle true"), run_command('time 6000'))
 
 
 def get_list_admins(chat_id: int):
@@ -129,8 +129,8 @@ def all_mesages(message):
 bot.set_my_commands(
     [
         telebot.types.BotCommand("/players", "Список игроков"),
-        telebot.types.BotCommand("/admins", "Список админов"),
-        telebot.types.BotCommand("/rcon", "Отправить rcon-команду"),
+        # telebot.types.BotCommand("/admins", "Список админов"),
+        # telebot.types.BotCommand("/rcon", "Отправить rcon-команду"),
         telebot.types.BotCommand("/day", "Остановить течение времени"),
         telebot.types.BotCommand("/night", "Включить течение времени"),
         # telebot.types.BotCommand("/sync", "Синхронизировать чат"),
