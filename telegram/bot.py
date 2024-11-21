@@ -107,6 +107,14 @@ def tps(message):
     bot.reply_to(message, run_command("tp @a l_0RD_D0M3CTOC"))
 
 
+@bot.message_handler(commands=["tph"])
+@check_chat
+def tph(message):
+    bot.reply_to(message, run_command("tp l_0RD_D0M3CTOC 3140 72 -13967"))
+    bot.reply_to(message, run_command("tp Queen_Mionta 3140 72 -13967"))
+    bot.reply_to(message, run_command("tp pugde123 3140 72 -13967"))
+
+
 @bot.message_handler(commands=["addplayers"])
 @check_chat
 def addplayers(message):
@@ -163,6 +171,7 @@ bot.set_my_commands(
         telebot.types.BotCommand("/recipe", "Дать все рецепты"),
         # telebot.types.BotCommand("/addplayers", "Добавить игрока на сервер"),
         telebot.types.BotCommand("/tps", "ТП - в разработке"),
+        telebot.types.BotCommand("/tph", "ТП - в разработке"),
     ]
 )
 
