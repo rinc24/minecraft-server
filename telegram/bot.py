@@ -110,9 +110,9 @@ def tps(message):
 @bot.message_handler(commands=["tph"])
 @check_chat
 def tph(message):
-    bot.reply_to(message, run_command("tp l_0RD_D0M3CTOC 3140 72 -13967"))
-    bot.reply_to(message, run_command("tp Queen_Mionta 3140 72 -13967"))
-    bot.reply_to(message, run_command("tp pugde123 3140 72 -13967"))
+    bot.reply_to(message, run_command("tp l_0RD_D0M3CTOC 3109 65 -13944"))
+    bot.reply_to(message, run_command("tp Queen_Mionta 3109 65 -13944"))
+    bot.reply_to(message, run_command("tp pugde123 3109 65 -13944"))
 
 
 @bot.message_handler(commands=["addplayers"])
