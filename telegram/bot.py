@@ -101,6 +101,12 @@ def recipe(message):
     bot.reply_to(message, run_command("recipe give @a *"))
 
 
+@bot.message_handler(commands=["tps"])
+@check_chat
+def tps(message):
+    bot.reply_to(message, run_command("tp @a l_0RD_D0M3CTOC"))
+
+
 @bot.message_handler(commands=["addplayers"])
 @check_chat
 def addplayers(message):
@@ -155,7 +161,8 @@ bot.set_my_commands(
         telebot.types.BotCommand("/night", "Включить течение времени"),
         # telebot.types.BotCommand("/sync", "Синхронизировать чат"),
         telebot.types.BotCommand("/recipe", "Дать все рецепты"),
-        telebot.types.BotCommand("/addplayers", "Добавить игрока на сервер"),
+        # telebot.types.BotCommand("/addplayers", "Добавить игрока на сервер"),
+        telebot.types.BotCommand("/tps", "ТП - в разработке"),
     ]
 )
 
