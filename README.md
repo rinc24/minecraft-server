@@ -16,3 +16,13 @@ RCON_PASSWORD=f03e6e3*******36324e7b
 ```shell
 cat /home/minecraft/server/server.properties | grep "rcon.password="
 ```
+
+Использование autossh (Рекомендуется)
+autossh — это утилита, которая специально создана для мониторинга SSH-туннелей. Если связь обрывается, она мгновенно перезапускает SSH.
+
+1. Установите её:
+   1. `sudo apt update && sudo apt install autossh -y`
+   2. Запустите туннель через неё: `autossh -M 0 -f -N -q -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -D 0.0.0.0:1488 serb`
+       * -M 0: отключает собственный мониторинг портов autossh (рекомендуется полагаться на встроенные в SSH ServerAlive).
+       * ServerAliveInterval 60: каждые 60 секунд проверять, жив ли сервер.
+       * ServerAliveCountMax 3: если 3 проверки подряд не прошли — перезапустить туннель.

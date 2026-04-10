@@ -1,39 +1,56 @@
-version: "3"
-
 services:
-  # minecraft.server:
-  #   container_name: minecraft.server
-  #   image: itzg/minecraft-server
-  #   restart: unless-stopped
-  #   tty: true
-  #   stdin_open: true
-  #   ports:
-  #     - 25565:25565
-  #   volumes:
-  #     - ./minecraft-data:/data
-  #   environment:
-  #     - EULA=TRUE
-  #     - VERSION=1.20.2
-  #     - MEMORY=3G
-  #     - RCON_PASSWORD
+  minecraft.server:
+    image: itzg/minecraft-server:latest
+    container_name: minecraft.server
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+      TYPE: "PAPER"
+      VERSION: "1.21.11"
+      MEMORY: "4G"
+      USE_AIKAR_FLAGS: "true"
+      ONLINE_MODE: "FALSE"
+      TZ: "Asia/Yekaterinburg"
+      ENABLE_RCON: "true"
+      RCON_PASSWORD: "${RCON_PASSWORD}"
+      ENFORCE_WHITELIST: "TRUE"
+      PLUGINS: "https://github.com/AuthMe/AuthMeReloaded/releases/download/5.6.0-beta2/AuthMe-5.6.0-beta2.jar"
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
   minecraft.notifier:
     container_name: minecraft.notifier
     build: ./telegram
     restart: unless-stopped
     volumes:
       - ./telegram-data:/data
-      - /home/minecraft/server/logs:/logs
+      - ./data/logs:/logs
     environment:
       - BOT_TOKEN
+      - TELEGRAM_PROXY
+      - LATEST_LOG_PATH=/logs/latest.log
+      - PROCESSED_LOG_PATH=/data/processed.log
+    depends_on:
+      - minecraft.server
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   minecraft.bot:
     container_name: minecraft.bot
     build: ./telegram
     restart: unless-stopped
-    network_mode: "host"
     volumes:
       - ./telegram-data:/data
     environment:
       - BOT_TOKEN
+      - TELEGRAM_PROXY
       - RCON_PASSWORD
+      - RCON_HOST=minecraft.server
     command: ["python", "-u", "/bot.py"]
+    depends_on:
+      - minecraft.server
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

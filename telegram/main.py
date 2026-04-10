@@ -8,18 +8,25 @@ import telebot
 
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
+TELEGRAM_PROXY = os.getenv("TELEGRAM_PROXY")
 
-LATEST_LOG_PATH = Path(os.getenv("LATEST_LOG_PATH", "logs/latest.log"))
-PROCESSED_LOG_PATH = Path(os.getenv("PROCESSED_LOG_PATH", "logs/processed.log"))
-DATA_PATH = Path(os.getenv("DATA_PATH", "data/data.json"))
+if TELEGRAM_PROXY:
+    from telebot import apihelper
 
-DEFAULT_DATA = {"ADMIN_USER_ID": None, "CHAT_ID": None, "SYNC_CHAT": True}
+    apihelper.proxy = {"https": TELEGRAM_PROXY}
+
+LATEST_LOG_PATH = Path(os.getenv("LATEST_LOG_PATH", "/logs/latest.log"))
+PROCESSED_LOG_PATH = Path(os.getenv("PROCESSED_LOG_PATH", "/data/processed.log"))
+DATA_PATH = Path(os.getenv("DATA_PATH", "/data/data.json"))
+
+DEFAULT_DATA = {"ADMIN_USER_IDS": [], "CHAT_ID": None, "SYNC_CHAT": True}
 
 PATTERN = r"^\[(\d{2}:\d{2}:\d{2})\] \[.*/(\w{4})\]: (\[Not Secure\] )?(.*)$"
 
 
 def get_data():
-    if not os.path.isfile(DATA_PATH):
+    if not DATA_PATH.exists():
+        DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
         write_data(DEFAULT_DATA)
 
     with open(DATA_PATH, "r") as data_file:
@@ -51,6 +58,12 @@ last_log_size = 0
 
 while __name__ == "__main__":
     chat_id = get_data()["CHAT_ID"]
+
+    if not LATEST_LOG_PATH.exists():
+        # print(f"Log file {LATEST_LOG_PATH} not found, waiting...")
+        sleep(5)
+        continue
+
     actual_log_size = os.path.getsize(LATEST_LOG_PATH)
 
     if not chat_id or last_log_size == actual_log_size:
@@ -59,8 +72,8 @@ while __name__ == "__main__":
     else:
         last_log_size = actual_log_size
 
-    LATEST_LOG_PATH.touch()
-    PROCESSED_LOG_PATH.touch()
+    # LATEST_LOG_PATH.touch() # Why touch it?
+    PROCESSED_LOG_PATH.touch(exist_ok=True)
 
     with open(LATEST_LOG_PATH, "r") as latest_log:
         latest_log_lines = [line.strip() for line in latest_log.read().split("\n") if line.strip()]
