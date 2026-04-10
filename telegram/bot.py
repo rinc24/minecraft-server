@@ -131,27 +131,6 @@ def players(message):
     bot.reply_to(message, run_command("list"))
 
 
-def get_list_admins(chat_id: int):
-    return "\n".join(
-        [f"* {get_chat_member_name(chat_id, user_id=admin_id)}" for admin_id in get_data()["ADMIN_USER_IDS"]]
-    ) or "Нет админов"
-
-
-@bot.message_handler(commands=["admins"])
-@check_chat
-def admins(message):
-    bot.reply_to(message, get_list_admins(message.chat.id))
-
-
-def get_chat_member_name(chat_id: int, user_id: int):
-    chat_member = bot.get_chat_member(chat_id=chat_id, user_id=user_id)
-    return (
-        chat_member.custom_title
-        or chat_member.user.username
-        or " ".join([name for name in (chat_member.user.first_name, chat_member.user.last_name) if name])
-    )
-
-
 @bot.message_handler(func=lambda m: True)
 @check_chat
 def all_mesages(message):
@@ -167,9 +146,7 @@ def all_mesages(message):
 bot.set_my_commands(
     [
         telebot.types.BotCommand("/players", "Список игроков"),
-        telebot.types.BotCommand("/admins", "Список админов"),
-        telebot.types.BotCommand("/rcon", "Отправить rcon-команду"),
-        # telebot.types.BotCommand("/sync", "Синхронизировать чат"),
+        telebot.types.BotCommand("/sync", "Синхронизировать чат"),
     ]
 )
 
