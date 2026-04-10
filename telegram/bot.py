@@ -125,10 +125,31 @@ def rcon_handler(message):
     bot.reply_to(message, run_command(command))
 
 
+def get_list_admins(chat_id: int):
+    return "\n".join(
+        [f"* {get_chat_member_name(chat_id, user_id=admin_id)}" for admin_id in get_data()["ADMIN_USER_IDS"]]
+    ) or "Нет админов"
+
+
+def get_chat_member_name(chat_id: int, user_id: int):
+    chat_member = bot.get_chat_member(chat_id=chat_id, user_id=user_id)
+    return (
+        chat_member.custom_title
+        or chat_member.user.username
+        or " ".join([name for name in (chat_member.user.first_name, chat_member.user.last_name) if name])
+    )
+
+
 @bot.message_handler(commands=["players"])
 @check_chat
 def players(message):
     bot.reply_to(message, run_command("list"))
+
+
+@bot.message_handler(commands=["admins"])
+@check_chat
+def admins(message):
+    bot.reply_to(message, get_list_admins(message.chat.id))
 
 
 @bot.message_handler(func=lambda m: True)
